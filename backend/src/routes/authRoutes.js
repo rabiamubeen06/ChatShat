@@ -1,5 +1,5 @@
 import express from "express";
-import { signup, login, logout, checkAuth } from "../controllers/authController.js";
+import { signup, login, logout, checkAuth, updateProfile } from "../controllers/authController.js";
 import { protectRoute } from "../middleware/protectedRoute.js";
 import { loginLimiter, signupLimiter } from "../middleware/rateLimiter.js";
 const router = express.Router();
@@ -7,4 +7,5 @@ router.post("/signup", signupLimiter, signup);
 router.post("/login", loginLimiter, login);
 router.post("/logout", logout);
 router.get("/checkAuth", protectRoute, checkAuth);
+router.put("/update-profile", protectRoute, updateProfile);
 export default router;

@@ -92,7 +92,7 @@ export const login = async(req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 }
-export const logout = async(req, res) => {
+export const logout = async(_, res) => {
     try {
         const supabase = createClient(req, res);
 
@@ -109,9 +109,25 @@ export const logout = async(req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 };
-export const checkAuth = async(req, res) => {
+export const checkAuth = (req, res) => {
     res.status(200).json({
         user: req.user,
         profile: req.profile,
     });
+}
+export const updateProfile = async(req, res) => {
+    try {
+        const { profilePic } = req.body;
+        if (!profilePic) return res.status(400).json({ message: "Profile pic is required" });
+        const uploadResponse = await cloudinary.uploader.upload(profilePic);
+        const updateProfile = await Profile.findOneAndUpdate({ supabaseId: req.user.id }, { profilePic: uploadResponse.secure_url }, { new: true });
+        if (!updateProfile) {
+            return res.status(404).json({ message: "Profile not found" });
+        }
+        res.status(200).json(updatedProfile);
+
+    } catch (error) {
+        console.log("Error in updateProfile Controller:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
 }
