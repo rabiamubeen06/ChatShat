@@ -1,6 +1,7 @@
 import Profile from "../models/Profile.js";
 import { createClient } from "../lib/supabaseServer.js";
 import { SupabaseClient } from "@supabase/supabase-js";
+import { uploadImageToSupabase } from "../lib/uploadImage.js";
 
 export const signup = async(req, res) => {
 
@@ -117,39 +118,26 @@ export const checkAuth = (req, res) => {
     });
 }
 export const updateProfile = async(req, res) => {
-
     try {
         const { profilePic } = req.body;
         if (!profilePic) return res.status(400).json({ message: "Profile pic is required" });
+
         const supabase = createClient(req, res);
-
-        const matches = profilePic.match(/^data:(.+);base64,(.+)$/);
-        if (!matches) {
-            return res.status(400).json({ message: "Invalid image format" });
-
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
+        if (userError || !user) {
+            return res.status(401).json({ message: "Unauthorized" });
         }
-        const mimeType = matches[1];
-        const base64Data = matches[2];
-        const buffer = Buffer.from(base64Data, "base64");
-        const fileExt = mimeType.split("/")[1];
-        const fileName = `${req.user.id}.${fileExt}`;
-        const { error: uploadError } = await supabase.storage
-            .from("avatars").upload(fileName, buffer, {
-                contentType: mimeType,
-                upsert: true,
-            });
-        if (uploadError) {
-            return res.status(400).json({ message: uploadError.message });
 
-        }
-        const { data: urlData } = supabase.storage.from("avatars")
-            .getPublicUrl(fileName);
-        const updatedProfile = await Profile.findOneAndUpdate({ supabaseId: req.user.id }, { profilePic: urlData.publicUrl }, { new: true });
+        const publicUrl = await uploadImageToSupabase(supabase, profilePic, "Avatars", user.id);
+
+        const updatedProfile = await Profile.findOneAndUpdate({ supabaseId: user.id }, { profilePic: publicUrl }, { new: true });
+
         if (!updatedProfile) return res.status(404).json({ message: "Profile not found" });
+
         res.status(200).json(updatedProfile);
 
     } catch (error) {
         console.log("Error in updateProfile Controller:", error);
-        res.status(500).json({ message: "Internal server error" });
+        res.status(500).json({ message: error.message || "Internal server error" });
     }
-}
+};
