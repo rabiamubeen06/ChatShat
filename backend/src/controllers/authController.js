@@ -1,6 +1,7 @@
 import Profile from "../models/Profile.js";
 import { createClient } from "../lib/supabaseServer.js";
 import { SupabaseClient } from "@supabase/supabase-js";
+
 export const signup = async(req, res) => {
 
     const { fullName, email, password } = req.body;
@@ -116,14 +117,35 @@ export const checkAuth = (req, res) => {
     });
 }
 export const updateProfile = async(req, res) => {
+
     try {
         const { profilePic } = req.body;
         if (!profilePic) return res.status(400).json({ message: "Profile pic is required" });
-        const uploadResponse = await cloudinary.uploader.upload(profilePic);
-        const updateProfile = await Profile.findOneAndUpdate({ supabaseId: req.user.id }, { profilePic: uploadResponse.secure_url }, { new: true });
-        if (!updateProfile) {
-            return res.status(404).json({ message: "Profile not found" });
+        const supabase = createClient(req, res);
+
+        const matches = profilePic.match(/^data:(.+);base64,(.+)$/);
+        if (!matches) {
+            return res.status(400).json({ message: "Invalid image format" });
+
         }
+        const mimeType = matches[1];
+        const base64Data = matches[2];
+        const buffer = Buffer.from(base64Data, "base64");
+        const fileExt = mimeType.split("/")[1];
+        const fileName = `${req.user.id}.${fileExt}`;
+        const { error: uploadError } = await supabase.storage
+            .from("avatars").upload(fileName, buffer, {
+                contentType: mimeType,
+                upsert: true,
+            });
+        if (uploadError) {
+            return res.status(400).json({ message: uploadError.message });
+
+        }
+        const { data: urlData } = supabase.storage.from("avatars")
+            .getPublicUrl(fileName);
+        const updatedProfile = await Profile.findOneAndUpdate({ supabaseId: req.user.id }, { profilePic: urlData.publicUrl }, { new: true });
+        if (!updatedProfile) return res.status(404).json({ message: "Profile not found" });
         res.status(200).json(updatedProfile);
 
     } catch (error) {
