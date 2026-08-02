@@ -15,6 +15,7 @@ export const useAuthStore = create((set) => ({
             set({ authUser: res.data });
         } catch (error) {
             console.log("Error in authCheck", error);
+            toast.error(error.response.data.message || "Failed to check authentication");
             set({ authUser: null });
 
         } finally {
