@@ -44,12 +44,10 @@ export const signup = async(req, res) => {
         await newProfile.save();
         return res.status(201).json({
             message: "Signup successful. Check your email to verify your account.",
-            user: {
-                id: data.user.id,
-                email: data.user.email,
-                fullName: newProfile.fullName,
-                profilePic: newProfile.profilePic,
-            },
+            id: data.user.id,
+            email: data.user.email,
+            fullName: newProfile.fullName,
+            profilePic: newProfile.profilePic,
         })
 
 
@@ -80,12 +78,10 @@ export const login = async(req, res) => {
 
         return res.status(200).json({
             message: "Login successful",
-            user: {
-                id: data.user.id,
-                email: data.user.email,
-                fullName: profile.fullName,
-                profilePic: profile.profilePic,
-            },
+            id: data.user.id,
+            email: data.user.email,
+            fullName: profile.fullName,
+            profilePic: profile.profilePic,
         });
 
 
@@ -94,7 +90,7 @@ export const login = async(req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 }
-export const logout = async(_, res) => {
+export const logout = async(req, res) => {
     try {
         const supabase = createClient(req, res);
 
@@ -113,8 +109,10 @@ export const logout = async(_, res) => {
 };
 export const checkAuth = (req, res) => {
     res.status(200).json({
-        user: req.user,
-        profile: req.profile,
+        id: req.profile.supabaseId,
+        email: req.user.email,
+        fullName: req.profile.fullName,
+        profilePic: req.profile.profilePic,
     });
 }
 export const updateProfile = async(req, res) => {
@@ -128,7 +126,7 @@ export const updateProfile = async(req, res) => {
             return res.status(401).json({ message: "Unauthorized" });
         }
 
-        const publicUrl = await uploadImageToSupabase(supabase, profilePic, "Avatars", user.id);
+        const publicUrl = await uploadImageToSupabase(supabase, profilePic, "avatars", user.id);
 
         const updatedProfile = await Profile.findOneAndUpdate({ supabaseId: user.id }, { profilePic: publicUrl }, { new: true });
 
