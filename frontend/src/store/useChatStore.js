@@ -3,6 +3,8 @@ import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
 
 
+
+
 const useChatStore = create((set, get) => ({
     allContacts: [],
     chats: [],
@@ -17,7 +19,7 @@ const useChatStore = create((set, get) => ({
     getAllContacts: async() => {
         set({ isUserLoading: true });
         try {
-            const res = await axios.axiosInstance.get("/messages/contacts");
+            const res = await axiosInstance.get("/messages/contacts");
             set({ allContacts: res.data });
 
         } catch (error) {
@@ -28,9 +30,44 @@ const useChatStore = create((set, get) => ({
         } finally {
             set({ isUserLoading: false });
         }
+    },
+    getChats: async() => {
+        set({ isUserLoading: true });
+        try {
+            const res = await axiosInstance.get("/messages/chats");
+            set({ chats: res.data });
+        } catch (error) {
+            console.log("Error in getChats:", error);
+            toast.error(error.response.data.message || "Failed to fetch chats");
+        } finally {
+            set({ isUserLoading: false });
+        }
+    },
+    getMessagesByUserId: async(userId) => {
+        console.log("Fetching messages for userId:", userId);
+        set({ isMessageLoading: true });
+        try {
+            const res = await axiosInstance.get(`/messages/${userId}`);
+            set({ messages: res.data });
+        } catch (error) {
+            console.log("Error in getMessagesByUserId:", error);
+            toast.error(error.response.data.message || "Failed to fetch messages");
+        } finally {
+            set({ isMessageLoading: false });
+        }
+    },
+    sendMessage: async(messageData) => {
+        const { selectedUser, messages } = get();
+        try {
+            const res = await axiosInstance.post(`/messages/send/${selectedUser.supabaseId}`, messageData);
+            set({ messages: messages.concat(res.data) });
+
+        } catch (error) {
+            toast.error(error.response.data.message) || "Something went wrong";
+            console.log("Error in sendMessage:", error);
+
+        }
     }
-
-
 
 }))
 export default useChatStore;
