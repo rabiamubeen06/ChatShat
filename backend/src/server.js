@@ -5,8 +5,8 @@ import messageRoutes from "./routes/messageRoutes.js"
 import cookieParser from "cookie-parser";
 import { connectDB } from './lib/db.js';
 import cors from 'cors'
+import { app, server } from "./lib/socket.js";
 
-const app = express();
 app.use(cookieParser());
 app.use(express.json({ limit: "10mb" }));
 app.use(cors({
@@ -17,7 +17,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log("Server is running on port: " + PORT);
     connectDB();
 });

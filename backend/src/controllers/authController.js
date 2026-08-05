@@ -45,6 +45,7 @@ export const signup = async(req, res) => {
         return res.status(201).json({
             message: "Signup successful. Check your email to verify your account.",
             id: data.user.id,
+            profileId: newProfile._id,
             email: data.user.email,
             fullName: newProfile.fullName,
             profilePic: newProfile.profilePic,
@@ -79,6 +80,7 @@ export const login = async(req, res) => {
         return res.status(200).json({
             message: "Login successful",
             id: data.user.id,
+            profileId: profile._id,
             email: data.user.email,
             fullName: profile.fullName,
             profilePic: profile.profilePic,
@@ -110,6 +112,7 @@ export const logout = async(req, res) => {
 export const checkAuth = (req, res) => {
     res.status(200).json({
         id: req.profile.supabaseId,
+        profileId: req.profile._id,
         email: req.user.email,
         fullName: req.profile.fullName,
         profilePic: req.profile.profilePic,

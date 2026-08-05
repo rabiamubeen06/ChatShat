@@ -2,6 +2,7 @@ import Message from "../models/Message.js";
 import Profile from "../models/Profile.js";
 import { uploadImageToSupabase } from "../lib/uploadImage.js";
 import { createClient } from "../lib/supabaseServer.js";
+import { getReceiverSocketIds, io } from "../lib/socket.js";
 
 export const getAllContacts = async(req, res) => {
     try {
@@ -30,9 +31,7 @@ export const getMessagesByUserId = async(req, res) => {
                     { senderId: otherProfile._id, receiverId: myProfile._id },
                 ],
             })
-            .sort({ createdAt: 1 })
-            .populate("senderId", "fullName profilePic")
-            .populate("receiverId", "fullName profilePic");
+            .sort({ createdAt: 1 });
 
         res.status(200).json(messages);
 
@@ -74,7 +73,10 @@ export const sendMessage = async(req, res) => {
         });
 
         await newMessage.save();
-
+        const receiverSocketIds = getReceiverSocketIds(receiverProfile.supabaseId);
+        receiverSocketIds.forEach((socketId) => {
+            io.to(socketId).emit("newMessage", newMessage);
+        });
         res.status(201).json(newMessage);
 
     } catch (error) {
