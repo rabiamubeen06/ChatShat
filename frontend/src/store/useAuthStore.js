@@ -1,14 +1,20 @@
 import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
+import { io } from "socket.io-client"
+
 
 import toast from "react-hot-toast";
 
-export const useAuthStore = create((set) => ({
+
+const baseURL =
+    import.meta.env.MODE === 'development' ? "http://localhost:3000" : "/";
+export const useAuthStore = create((set, get) => ({
     authUser: null,
     isCheckingAuth: true,
     isSigningUp: false,
     isLoggingIn: false,
     onlineUsers: [],
+    socket: null,
 
     checkAuth: async() => {
         try {
@@ -29,7 +35,8 @@ export const useAuthStore = create((set) => ({
         try {
             const res = await axiosInstance.post("/auth/signup", data);
             set({ authUser: res.data });
-            toast.success("Account created Successfully!")
+            toast.success("Account created Successfully!");
+            get().connectSocket();
 
         } catch (error) {
             toast.error(error.response.data.message);
@@ -43,6 +50,7 @@ export const useAuthStore = create((set) => ({
             const res = await axiosInstance.post("/auth/login", data);
             set({ authUser: res.data });
             toast.success("Logged in Successfully!")
+            get().connectSocket();
 
         } catch (error) {
             toast.error(error.response.data.message);
@@ -54,7 +62,8 @@ export const useAuthStore = create((set) => ({
         try {
             await axiosInstance.post("/auth/logout");
             set({ authUser: null });
-            toast.success("Logged out Successfully!")
+            toast.success("Logged out Successfully!");
+            get().disconnectSocket();
         } catch (error) {
             toast.error(error.response.data.message);
         }
@@ -71,4 +80,38 @@ export const useAuthStore = create((set) => ({
             toast.error(error.response.data.message);
         }
     },
+    connectSocket: async() => {
+        const { authUser } = get();
+
+        if (!authUser || (get().socket && get().socket.connected)) return;
+
+
+
+        const socket = io(baseURL, {
+            withCredentials: true,
+        });
+
+
+        socket.on("getOnlineUsers", (userIds) => {
+            set({ onlineUsers: userIds });
+        });
+        socket.on("connect_error", async(err) => {
+            if (err.message === "Unauthorized") {
+                try {
+                    // hits checkAuth -> triggers Supabase SSR client -> refreshes + rewrites cookie
+                    await axiosInstance.get("/auth/checkAuth");
+                    socket.connect(); // retry handshake with the fresh cookie
+                } catch {
+                    get().disconnectSocket();
+                    set({ authUser: null }); // session truly dead, force re-login
+                }
+            }
+        });
+
+        set({ socket });
+    },
+    disconnectSocket: () => {
+        if (get().socket && get().socket.connected) get().socket.disconnect();
+
+    }
 }));
