@@ -7,17 +7,23 @@ import NoChatHistoryPlaceholder from './NoChatHistary';
 import MessagesLoading from './MessagesLoading';
 import MessageInput from './MessageInput';
 const ChatContainer = () => {
-const { selectedUser,getMessagesByUserId,messages,isMessageLoading } = useChatStore();
+const { selectedUser,getMessagesByUserId,messages,isMessageLoading,subscribeToMessages ,unsubscribeFromMessages} = useChatStore();
+const { socket } = useAuthStore();
+
 const {authUser} = useAuthStore();
 const messageEndRef=useRef(null);
 useEffect(() => {  
   getMessagesByUserId(selectedUser.supabaseId);
-}, [selectedUser,getMessagesByUserId]);
+    if (!socket) return;
+  subscribeToMessages();
+  return ()=>unsubscribeFromMessages();
+}, [selectedUser,getMessagesByUserId,subscribeToMessages,unsubscribeFromMessages]);
 useEffect(()=>{
   if(messageEndRef.current){
-    messageEndRef.current.scrollIntoView({behahvior:"smooth"});
+    messageEndRef.current.scrollIntoView({behavior:"smooth", block: "nearest" });
   }
 },[messages]);
+
 
   return (
     <div className='flex flex-col h-full w-full '>
@@ -28,10 +34,10 @@ useEffect(()=>{
         {messages.length>0 && !isMessageLoading? (
           <div className='max-w-3xl mx-auto space-y-6'>
             {messages.map(msg=>(<div key={msg.id} 
-            className={`chat ${msg.senderId===authUser.id?"chat-end":"chat-start"}`}
+            className={`chat ${msg.senderId===authUser.profileId?"chat-end":"chat-start"}`}
             >
               <div className={`chat-bubble relative ${
-                msg.senderId===authUser.id? "bg-cyan-600 text-white"
+                msg.senderId===authUser.profileId? "bg-cyan-600 text-white"
                 :"bg-slate-500 text-slate-200"
               }`} >
 
@@ -49,7 +55,7 @@ useEffect(()=>{
 
               </div>
             </div>))}
-            {/* <div ref={messageEndRef}/> */}
+            <div ref={messageEndRef}/>
           </div>
         ): isMessageLoading?<MessagesLoading/>:( 
           <NoChatHistoryPlaceholder name={selectedUser.fullName}/>)}

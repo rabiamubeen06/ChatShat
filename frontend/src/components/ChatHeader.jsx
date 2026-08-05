@@ -7,7 +7,7 @@ import { XIcon } from 'lucide-react';
 const ChatHeader = () => {
     const {selectedUser,setSelectedUser} = useChatStore();
     const {onlineUsers}=useAuthStore();
-    const isOnline=onlineUsers.includes(selectedUser.supabaseId);
+    const isOnline=selectedUser ? onlineUsers.includes(selectedUser.supabaseId): false;
     useEffect(() => {
 
             const handleEscKey=(event) => {
@@ -33,7 +33,7 @@ const ChatHeader = () => {
         <p className="text-sm text-slate-500">{isOnline?"Online": "Offline"}</p>
       </div>
       </div>
-      <button>
+      <button onClick={()=>setSelectedUser(null)}>
          <XIcon className="w-5 h-5 text-slate-400 hover:text-slate-200 transition-colors cursor-pointer" />
       </button>
 

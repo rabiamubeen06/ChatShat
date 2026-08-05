@@ -17,7 +17,7 @@ const ChatsList = () => {
     <>
     {chats.map(chat=>(
       <div key={chat.id}
-      onClick={()=>setSelectedUser(chat.contact)}
+      onClick={()=>setSelectedUser(chat)}
       className='flex items-center gap-3 p-2 rounded-lg hover:bg-slate-700/50 cursor-pointer transition-colors'>
          <div className="flex items-center gap-3">
             <div className={`avatar ${onlineUsers.includes(chat.id) ? "avatar-online" : "avatar-offline"}`}>

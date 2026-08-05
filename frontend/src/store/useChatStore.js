@@ -63,8 +63,8 @@ const useChatStore = create((set, get) => ({
         const tempId = `temp-${Date.now()}`;
         const optimisticMessage = {
             _id: tempId,
-            senderId: authUser.supabaseId,
-            receiverId: selectedUser.supabaseId,
+            senderId: authUser.profileId,
+            receiverId: selectedUser.profileId,
             text: messageData.text,
             image: messageData.image,
             createdAt: new Date().toISOString(),
@@ -83,6 +83,25 @@ const useChatStore = create((set, get) => ({
             console.log("Error in sendMessage:", error);
 
         }
+    },
+    subscribeToMessages: () => {
+        const { selectedUser } = get();
+        if (!selectedUser) return;
+        const socket = useAuthStore.getState().socket;
+        if (!socket) return;
+        socket.on("newMessage", (newMessage) => {
+            const currentMessages = get().messages;
+            set({ messages: [...currentMessages, newMessage] });
+
+        })
+
+
+
+    },
+    unsubscribeFromMessages: () => {
+        const socket = useAuthStore.getState().socket;
+        if (!socket) return;
+        socket.off("newMessage");
     }
 
 }))
