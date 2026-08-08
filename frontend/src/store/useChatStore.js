@@ -3,9 +3,6 @@ import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
 import { useAuthStore } from "./useAuthStore";
 
-
-
-
 const useChatStore = create((set, get) => ({
     allContacts: [],
     chats: [],

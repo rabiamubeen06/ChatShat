@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @plugin "daisyui";
+@custom-variant dark (&:where(.dark, .dark *));
 @property --border-angle {
     inherits: false;
     initial-value: 0deg;
@@ -8,6 +9,15 @@
 
 @theme {
     --animate-border: border-spin 4s linear infinite;
+    /* Light lilac theme palette */
+    --color-lilac-50: #faf7fc;
+    --color-lilac-100: #f2e9f7;
+    --color-lilac-200: #e4d1ee;
+    --color-lilac-300: #d0aee0;
+    --color-lilac-400: #c8a2c8;
+    --color-lilac-500: #b285b8;
+    --color-lilac-600: #9a6ba0;
+    --color-lilac-700: #7d5382;
 }
 
 @keyframes border-spin {
@@ -18,33 +28,51 @@
 
 @layer components {
     .auth-input-label {
-        @apply block text-sm font-medium text-slate-300 mb-2 space-y-2;
+        @apply block text-sm font-medium text-slate-600 mb-2 space-y-2;
+        @variant dark {
+            @apply text-slate-300;
+        }
     }
     .auth-input-icon {
         @apply absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400;
+        @variant dark {
+            @apply text-slate-500;
+        }
     }
     .auth-input {
-        @apply w-full bg-slate-800/50 border border-slate-700 rounded-lg py-2.5 pl-10 pr-4 text-slate-200 placeholder-slate-500 transition-colors;
+        @apply w-full bg-white border border-lilac-200 rounded-lg py-2.5 pl-10 pr-4 text-slate-800 placeholder-slate-400 transition-colors;
+        @variant dark {
+            @apply bg-lilac-500/20 border-slate-700 text-slate-100 placeholder-slate-400;
+        }
         &:focus {
-            @apply outline-none ring-2 ring-cyan-500 border-transparent;
+            @apply outline-none ring-2 ring-lilac-500 border-transparent;
         }
     }
     .auth-badge {
-        @apply inline-flex items-center px-3 py-1 text-xs font-medium rounded-full bg-cyan-500/20 text-cyan-300;
+        @apply inline-flex items-center px-3 py-1 text-xs font-medium rounded-full bg-lilac-100 text-lilac-700;
+        @variant dark {
+            @apply bg-lilac-500/20 text-lilac-300;
+        }
     }
     .auth-btn {
-        @apply w-full bg-cyan-500 text-white rounded-lg py-2.5 font-medium transition-colors;
+        @apply w-full bg-lilac-500 text-white rounded-lg py-2.5 font-medium transition-colors;
         &:hover {
-            @apply bg-cyan-600;
+            @apply bg-lilac-600;
         }
         &:focus {
-            @apply outline-none ring-2 ring-cyan-500;
+            @apply outline-none ring-2 ring-lilac-500;
         }
     }
     .auth-link {
-        @apply px-4 py-2 inline-block bg-cyan-500/10 rounded-lg text-cyan-400 text-sm transition-colors;
+        @apply px-4 py-2 inline-block bg-lilac-100 text-lilac-600 text-sm transition-colors;
+        @variant dark {
+            @apply bg-lilac-500/10 text-lilac-400;
+        }
         &:hover {
-            @apply text-cyan-500;
+            @apply text-lilac-700;
+            @variant dark {
+                @apply text-lilac-300;
+            }
         }
     }
 }

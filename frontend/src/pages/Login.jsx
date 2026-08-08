@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import BorderAnimatedContainer from "../components/BorderAnimatedContainer";
-import { MessageCircleIcon, LockIcon, MailIcon,  LoaderIcon } from "lucide-react";
+import { LockIcon, MailIcon, LoaderIcon } from "lucide-react";
 import { Link } from "react-router";
+import ChatShatLogo from "../components/ChatShatLogo";
 
 function LoginPage() {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -19,25 +20,22 @@ function LoginPage() {
         <BorderAnimatedContainer>
           <div className="w-full h-full flex flex-col md:flex-row">
             {/* FORM COLUMN - LEFT SIDE */}
-            <div className="md:w-1/2 min-h-0 p-[clamp(1rem,4vh,2rem)] flex items-center justify-center md:border-r border-slate-600/30 overflow-hidden">
+            <div className="md:w-1/2 min-h-0 p-[clamp(1rem,4vh,2rem)] flex items-center justify-center md:border-r border-lilac-200 dark:border-slate-700/50 overflow-hidden bg-white/60 dark:bg-slate-900/60 backdrop-blur-sm">
               <div className="w-full max-w-md">
                 {/* HEADING TEXT */}
                 <div className="text-center mb-[clamp(0.75rem,3vh,2rem)]">
-                  <MessageCircleIcon className="w-[clamp(2rem,5vh,3rem)] h-[clamp(2rem,5vh,3rem)] mx-auto text-slate-400 mb-[clamp(0.5rem,2vh,1rem)]" />
-                  <h2 className="text-2xl font-bold text-slate-200 mb-2">Welcome Back!</h2>
-                  <p className="text-slate-400">Sign in to your account</p>
+                  <ChatShatLogo className="w-[clamp(12rem,28vh,18rem)] h-auto mx-auto mb-[clamp(0.5rem,2vh,1rem)]" />
+                  <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-2">Welcome Back!</h2>
+                  <p className="text-slate-500 dark:text-slate-400">Login to continue Chatting</p>
                 </div>
 
                 {/* FORM */}
                 <form onSubmit={handleSubmit} className="space-y-[clamp(0.75rem,2.5vh,1.5rem)]">
-      
-
                   {/* EMAIL INPUT */}
                   <div>
                     <label className="auth-input-label">Email</label>
                     <div className="relative">
                       <MailIcon className="auth-input-icon" />
-
                       <input
                         type="email"
                         value={formData.email}
@@ -53,7 +51,6 @@ function LoginPage() {
                     <label className="auth-input-label">Password</label>
                     <div className="relative">
                       <LockIcon className="auth-input-icon" />
-
                       <input
                         type="password"
                         value={formData.password}
@@ -83,15 +80,14 @@ function LoginPage() {
             </div>
 
             {/* FORM ILLUSTRATION - RIGHT SIDE */}
-            <div className="hidden md:w-1/2 md:flex flex-col min-h-0 items-center justify-center p-[clamp(1rem,3vh,1.5rem)]  overflow-hidden">
-            
-<div className="hidden md:flex items-center justify-center">
-  <img
-    src="/chat.jpg"
-    alt="chat"
-    className="w-full h-full object-cover filter brightness-100 opacity-60"
-  />
-</div>
+            <div className="hidden md:w-1/2 md:flex flex-col min-h-0 items-center justify-center p-[clamp(1rem,3vh,1.5rem)] overflow-hidden bg-lilac-50/60 dark:bg-slate-800/60 backdrop-blur-sm">
+              <div className="hidden md:flex items-center justify-center">
+                <img
+                  src="/chat.jpeg"
+                  alt="chat"
+                  className="w-full h-full object-cover filter brightness-100 dark:brightness-75 opacity-80"
+                />
+              </div>
             </div>
           </div>
         </BorderAnimatedContainer>

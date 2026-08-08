@@ -37,8 +37,8 @@ useEffect(()=>{
             className={`chat ${msg.senderId===authUser.profileId?"chat-end":"chat-start"}`}
             >
               <div className={`chat-bubble relative ${
-                msg.senderId===authUser.profileId? "bg-cyan-600 text-white"
-                :"bg-slate-500 text-slate-200"
+                msg.senderId===authUser.profileId? "bg-lilac-500 text-white"
+                :"bg-lilac-100 dark: bg-lilac-500/20 text-slate-800 dark:text-slate-100"
               }`} >
 
                 {msg.image&&<img src={msg.image} alt="Shared" className="rounded-lg h-48 object-cover"/>}

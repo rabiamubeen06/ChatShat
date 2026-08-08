@@ -2,7 +2,7 @@ import React from 'react'
 
 const BorderAnimatedContainer = ({ children }) => {
   return (
-   <div className="w-full h-full flex [background:linear-gradient(45deg,#172033,var(--color-slate-800)_50%,#172033)_padding-box,conic-gradient(from_var(--border-angle),var(--color-slate-600)_80%,var(--color-indigo-500)_86%,var(--color-indigo-300)_90%,var(--color-indigo-500)_94%,var(--color-slate-600))_border-box] rounded-2xl border border-transparent animate-border overflow-hidden">
+   <div className="w-full h-full flex [background:linear-gradient(45deg,#ffffff,var(--color-lilac-50)_50%,#ffffff)_padding-box,conic-gradient(from_var(--border-angle),var(--color-lilac-200)_80%,var(--color-lilac-500)_86%,var(--color-lilac-300)_90%,var(--color-lilac-500)_94%,var(--color-lilac-200))_border-box] dark:[background:linear-gradient(45deg,#2A2233,#362B4A_50%,#2A2233)_padding-box,conic-gradient(from_var(--border-angle),var(--color-lilac-700)_80%,var(--color-lilac-500)_86%,var(--color-lilac-300)_90%,var(--color-lilac-500)_94%,var(--color-lilac-700))_border-box] rounded-2xl border border-transparent animate-border overflow-hidden shadow-lg">
   {children}
 </div>
   )

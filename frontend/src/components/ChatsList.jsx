@@ -16,16 +16,16 @@ const ChatsList = () => {
   return (
     <>
     {chats.map(chat=>(
-      <div key={chat.id}
+      <div key={chat.id} 
       onClick={()=>setSelectedUser(chat)}
-      className='flex items-center gap-3 p-2 rounded-lg hover:bg-slate-700/50 cursor-pointer transition-colors'>
+        className="bg-lilac-100 dark:bg-lilac-500/20 p-4 rounded-lg cursor-pointer hover:bg-lilac-200 dark:hover:bg-lilac-500/100 transition-colors">
          <div className="flex items-center gap-3">
-            <div className={`avatar ${onlineUsers.includes(chat.id) ? "avatar-online" : "avatar-offline"}`}>
+            <div className={`avatar ${onlineUsers.includes(chat.supabaseId) ? "avatar-online" : "avatar-offline"}`}>
               <div className="size-12 rounded-full">
                 <img src={chat.profilePic || "/avatar.png"} alt={chat.fullName} />
               </div>
             </div>
-            <h4 className="text-slate-200 font-medium truncate">{chat.fullName}</h4>
+            <h4 className="text-slate-800 dark:text-slate-100 font-medium truncate">{chat.fullName}</h4>
           </div>
 
       </div>
