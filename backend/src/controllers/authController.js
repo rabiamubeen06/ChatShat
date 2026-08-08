@@ -25,7 +25,7 @@ export const signup = async(req, res) => {
             password,
             options: {
                 data: { fullName },
-                emailRedirectTo: `https://google.com`,
+                emailRedirectTo: `${process.env.CLIENT_URL}/login`,
             },
         })
         if (error) {
