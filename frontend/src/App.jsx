@@ -9,9 +9,10 @@ import toast, { Toaster } from "react-hot-toast";
 function App(){
   const {checkAuth,isCheckingAuth,authUser}=useAuthStore();
   useEffect(()=>{
-    checkAuth()
+    checkAuth();
+    console.log(authUser);
   },[checkAuth]);
-  console.log(authUser);
+  
   if(isCheckingAuth)return <PageLoader/>
   return(
     // Background grid

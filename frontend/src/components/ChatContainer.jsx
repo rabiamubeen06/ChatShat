@@ -12,9 +12,10 @@ const { socket } = useAuthStore();
 
 const {authUser} = useAuthStore();
 const messageEndRef=useRef(null);
-useEffect(() => {  
+useEffect(() => {
+  if (!selectedUser) return;
   getMessagesByUserId(selectedUser.supabaseId);
-    if (!socket) return;
+  if (!socket) return;
   subscribeToMessages();
   return ()=>unsubscribeFromMessages();
 }, [selectedUser,getMessagesByUserId,subscribeToMessages,unsubscribeFromMessages]);
@@ -24,6 +25,7 @@ useEffect(()=>{
   }
 },[messages]);
 
+if (!selectedUser) return null;
 
   return (
     <div className='flex flex-col h-full w-full '>
@@ -38,7 +40,7 @@ useEffect(()=>{
             >
               <div className={`chat-bubble relative ${
                 msg.senderId===authUser.profileId? "bg-lilac-500 text-white"
-                :"bg-lilac-100 dark: bg-lilac-500/20 text-slate-800 dark:text-slate-100"
+                :"bg-lilac-100 dark:bg-lilac-500/20 text-slate-800 dark:text-slate-100"
               }`} >
 
                 {msg.image&&<img src={msg.image} alt="Shared" className="rounded-lg h-48 object-cover"/>}

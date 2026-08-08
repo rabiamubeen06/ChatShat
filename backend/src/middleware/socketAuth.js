@@ -3,7 +3,6 @@ import Profile from "../models/Profile.js";
 
 export const socketAuthMiddleware = async(socket, next) => {
     try {
-        console.log("Middlware started");
         const supabase = createSocketClient(socket);
         console.log("Client created");
 

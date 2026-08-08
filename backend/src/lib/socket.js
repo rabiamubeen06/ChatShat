@@ -12,10 +12,8 @@ const io = new Server(server, {
         credentials: true,
     },
 });
-console.log("Before middleware");
 // apply authentication to all socket connections
 io.use(socketAuthMiddleware);
-console.log("After middleware");
 export function getReceiverSocketIds(userId) {
     const set = userSocketMap[userId];
     return set ? Array.from(set) : [];
