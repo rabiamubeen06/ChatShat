@@ -8,6 +8,7 @@ import cors from 'cors'
 import { app, server } from "./lib/socket.js";
 import path from "path";
 import { fileURLToPath } from "url";
+import { cleanupStaleGuests } from "./lib/cleanupGuests.js";
 
 const __dirname = path.dirname(fileURLToPath(
     import.meta.url));
@@ -33,3 +34,6 @@ server.listen(PORT, () => {
     console.log("Server is running on port: " + PORT);
     connectDB();
 });
+const SIX_HOURS = 6 * 60 * 60 * 1000;
+setInterval(cleanupStaleGuests, SIX_HOURS);
+cleanupStaleGuests();

@@ -15,8 +15,6 @@ export const useAuthStore = create((set, get) => ({
     isLoggingIn: false,
     onlineUsers: [],
     socket: null,
-    pendingSignupEmail: [],
-
     checkAuth: async() => {
         try {
             const res = await axiosInstance.get("/auth/checkAuth");
@@ -36,7 +34,6 @@ export const useAuthStore = create((set, get) => ({
         try {
             const res = await axiosInstance.post("/auth/signup", data);
             toast.success("Account created! Check your inbox to confirm.");
-            set({ pendingSignupEmail: data.email });
             return true;
 
         } catch (error) {
@@ -114,5 +111,18 @@ export const useAuthStore = create((set, get) => ({
     disconnectSocket: () => {
         if (get().socket && get().socket.connected) get().socket.disconnect();
 
-    }
+    },
+    guestLogin: async() => {
+        set({ isLoggingIn: true });
+        try {
+            const res = await axiosInstance.post("/auth/guest");
+            set({ authUser: res.data });
+            toast.success("Logged in as guest");
+            get().connectSocket();
+        } catch (error) {
+            toast.error(error.response.data.message || "Guest login failed");
+        } finally {
+            set({ isLoggingIn: false });
+        }
+    },
 }));

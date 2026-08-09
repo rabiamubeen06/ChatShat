@@ -7,7 +7,7 @@ import ChatShatLogo from "../components/ChatShatLogo";
 
 function LoginPage() {
   const [formData, setFormData] = useState({ email: "", password: "" });
-  const { login, isLoggingIn } = useAuthStore();
+  const { login, isLoggingIn,guestLogin } = useAuthStore();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -69,6 +69,14 @@ function LoginPage() {
                       "Login"
                     )}
                   </button>
+                 <button
+    type="button"
+    onClick={guestLogin}
+    disabled={isLoggingIn}
+    className="w-full mt-3 py-2.5 rounded-lg border border-lilac-300 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-medium text-sm hover:bg-lilac-50 dark:hover:bg-slate-800 transition-colors disabled:opacity-50"
+>
+    Continue as Guest
+</button>
                 </form>
 
                 <div className="mt-[clamp(0.75rem,2vh,1.5rem)] text-center">

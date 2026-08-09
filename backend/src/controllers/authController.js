@@ -92,14 +92,30 @@ export const login = async(req, res) => {
         res.status(500).json({ message: "Internal server error" });
     }
 }
+import Message from "../models/Message.js";
+
 export const logout = async(req, res) => {
     try {
         const supabase = createClient(req, res);
 
-        const { error } = await supabase.auth.signOut();
+        // Capture the user before signOut invalidates the session
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
 
+        const { error } = await supabase.auth.signOut();
         if (error) {
             return res.status(400).json({ message: error.message });
+        }
+
+        // If this was a guest account, wipe their Mongo data
+        if (user.is_anonymous) {
+            const profile = await Profile.findOne({ supabaseId: user.id });
+            if (profile) {
+                await Message.deleteMany({
+                    $or: [{ senderId: profile._id }, { receiverId: profile._id }],
+                });
+                await Profile.findByIdAndDelete(profile._id);
+            }
         }
 
         return res.status(200).json({ message: "Logged out successfully" });
@@ -140,5 +156,40 @@ export const updateProfile = async(req, res) => {
     } catch (error) {
         console.log("Error in updateProfile Controller:", error);
         res.status(500).json({ message: error.message || "Internal server error" });
+    }
+};
+export const guestLogin = async(req, res) => {
+    try {
+        const supabase = createClient(req, res);
+        const { data, error } = await supabase.auth.signInAnonymously();
+
+        if (error) {
+            return res.status(400).json({ message: error.message });
+        }
+        if (!data.user) {
+            return res.status(400).json({ message: "Guest login failed" });
+        }
+
+        const guestName = `Guest ${Math.floor(1000 + Math.random() * 9000)}`;
+
+        const newProfile = new Profile({
+            supabaseId: data.user.id,
+            fullName: guestName,
+            isGuest: true,
+        });
+        await newProfile.save();
+
+        return res.status(200).json({
+            message: "Guest login successful",
+            id: data.user.id,
+            profileId: newProfile._id,
+            fullName: newProfile.fullName,
+            profilePic: newProfile.profilePic,
+            isGuest: true,
+        });
+
+    } catch (error) {
+        console.log("Error in guestLogin Controller:", error);
+        res.status(500).json({ message: "Internal server error" });
     }
 };
