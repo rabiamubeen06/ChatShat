@@ -1,5 +1,5 @@
 {
-<<<<<<< HEAD
+
     "name": "ChatShat-frontend",
     "private": true,
     "version": "0.0.0",
@@ -37,7 +37,6 @@
         "vite": "^8.1.1"
     }
 }
-=======
   "name": "ChatShat-frontend",
   "private": true,
   "version": "0.0.0",
@@ -75,4 +74,4 @@
     "vite": "^8.1.1"
   }
 }
->>>>>>> d349640b92d41ee05a13da7c6a9be1aa9a6ae7c3
+
