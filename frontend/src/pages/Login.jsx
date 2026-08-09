@@ -15,10 +15,10 @@ function LoginPage() {
   };
 
   return (
-    <div className="w-2/3 h-full flex items-center justify-center p-4">
-      <div className="relative w-full max-w-6xl h-[90vh] max-h-[800px]">
+   <div className="w-full h-[100dvh] md:w-2/3 md:h-full flex items-center justify-center p-0 md:p-4">
+  <div className="relative w-full h-full md:max-w-6xl md:h-[90vh] md:max-h-[800px]">
         <BorderAnimatedContainer>
-          <div className="w-full h-full flex flex-col md:flex-row">
+          <div className="w-full h-full flex flex-col justify-center md:flex-row md:justify-normal">
             {/* FORM COLUMN - LEFT SIDE */}
             <div className="md:w-1/2 min-h-0 p-[clamp(1rem,4vh,2rem)] flex items-center justify-center md:border-r border-lilac-200 dark:border-slate-700/50 overflow-hidden bg-white/60 dark:bg-slate-900/60 backdrop-blur-sm">
               <div className="w-full max-w-md">

@@ -12,7 +12,7 @@ const ChatPage = () => {
   const { activeTab, selectedUser } = useChatStore();
 
   return (
-    <div className='relative w-2/3 h-[90vh] max-h-[800px] flex items-center justify-center'>
+   <div className='relative w-full h-[100dvh] md:w-2/3 md:h-[90vh] md:max-h-[800px] lg:w-[60%] flex items-center justify-center'>
       <BorderAnimatedContainer>
         {/* LEFT SIDE - sidebar */}
         <div className={`${selectedUser ? "hidden md:flex" : "flex"} w-full md:w-1/3 h-full bg-white/60 dark:bg-slate-900/60 backdrop-blur-sm flex-col border-r border-lilac-200 dark:border-slate-700/50`}>

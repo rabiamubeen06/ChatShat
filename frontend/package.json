@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
     "name": "ChatShat-frontend",
     "private": true,
     "version": "0.0.0",
@@ -36,3 +37,42 @@
         "vite": "^8.1.1"
     }
 }
+=======
+  "name": "ChatShat-frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "oxlint",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "autoprefixer": "^10.5.4",
+    "axios": "^1.19.0",
+    "lucide-react": "^1.28.0",
+    "postcss": "^8.5.25",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.7",
+    "react-hot-toast": "^2.6.0",
+    "react-router-dom": "^7.11.0",
+    "router": "^2.2.0",
+    "socket.io-client": "^4.8.3",
+    "tailwindcss": "^4.3.3",
+    "zustand": "^5.0.14"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.29.7",
+    "@rolldown/plugin-babel": "^0.2.3",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.3",
+    "babel-plugin-react-compiler": "^1.0.0",
+    "daisyui": "^5.7.9",
+    "oxlint": "^1.71.0",
+    "vite": "^8.1.1"
+  }
+}
+>>>>>>> d349640b92d41ee05a13da7c6a9be1aa9a6ae7c3

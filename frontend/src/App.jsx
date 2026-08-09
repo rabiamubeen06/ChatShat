@@ -16,9 +16,9 @@ function App(){
   if(isCheckingAuth)return <PageLoader/>
   return(
     // Background grid
-    <div className="min-h-screen bg-lilac-50 dark:bg-slate-950
-     relative flex items-center justify-center
-    p-4 overflow-hidden">
+   <div className="min-h-screen bg-lilac-50 dark:bg-slate-950
+   relative flex items-center justify-center
+  p-0 sm:p-4 overflow-hidden">
       {/* glow shapes */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000008_1px,transparent_1px),linear-gradient(to_bottom,#00000008_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)] bg-position-[40px_40px] bg-size-[20px_20px]"/>
       <div className="absolute -top-20 -left-20 w-96 h-96 bg-lilac-300 dark:bg-lilac-700 rounded-full opacity-30 dark:opacity-20 blur-3xl"></div>
