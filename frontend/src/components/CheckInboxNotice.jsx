@@ -1,6 +1,5 @@
 import React from 'react';
 import { useNavigate } from 'react-router';
-import { MailIcon } from 'lucide-react';
 import BorderAnimatedContainer from './BorderAnimatedContainer';
 import ChatShatLogo from './ChatShatLogo';
 
@@ -8,24 +7,28 @@ const CheckInboxNotice = ({ email }) => {
   const navigate = useNavigate();
 
   return (
-    <div className="w-2/3 h-full flex items-center justify-center p-4">
-      <div className="relative w-full max-w-6xl h-[90vh] max-h-[800px]">
+    <div className="w-full h-[100dvh] md:w-2/3 md:h-full flex items-center justify-center p-0 md:p-4">
+      <div className="relative w-full h-full md:max-w-6xl md:h-[90vh] md:max-h-[800px]">
         <BorderAnimatedContainer>
-          <div className="w-full h-full flex items-center justify-center bg-white/60 dark:bg-slate-900/60 backdrop-blur-sm p-[clamp(1rem,4vh,2rem)]">
+          <div className="w-full h-full flex items-center justify-center bg-white/60 dark:bg-slate-900/60 backdrop-blur-sm p-[clamp(1.25rem,5vh,2rem)]">
             <div className="w-full max-w-md text-center">
-              <ChatShatLogo className="w-[clamp(10rem,26vh,16rem)] h-auto mx-auto mb-[clamp(0.5rem,2vh,1rem)]" />
+          
+              <ChatShatLogo className="w-[clamp(8rem,22vh,16rem)] h-auto mx-auto mb-[clamp(0.75rem,2vh,1rem)]" />
 
-              <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-2">
+              <h2 className="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-100 mb-2">
                 Check your inbox
               </h2>
-              <p className="text-slate-500 dark:text-slate-400 mb-1">
-                We sent a confirmation link{email ? <> to <span className="text-slate-700 dark:text-slate-300">{email}</span></> : ""}.
+              <p className="text-sm sm:text-base text-slate-500 dark:text-slate-400 mb-1 px-2">
+                We sent a confirmation link{email ? <> to <span className="text-slate-700 dark:text-slate-300 break-all">{email}</span></> : ""}.
               </p>
-              <p className="text-slate-500 dark:text-slate-400 mb-8">
+              <p className="text-sm sm:text-base text-slate-500 dark:text-slate-400 mb-6 sm:mb-8 px-2">
                 Once you've confirmed your email, log in to continue.
               </p>
 
-              <button onClick={() => navigate('/login')} className="auth-btn">
+              <button
+                onClick={() => navigate('/login')}
+                className="auth-btn w-full sm:w-auto"
+              >
                 Continue to login
               </button>
             </div>
