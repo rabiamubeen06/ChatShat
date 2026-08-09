@@ -61,7 +61,7 @@ const useChatStore = create((set, get) => ({
         const optimisticMessage = {
             _id: tempId,
             senderId: authUser.profileId,
-            receiverId: selectedUser.profileId,
+            receiverId: selectedUser._id,
             text: messageData.text,
             image: messageData.image,
             createdAt: new Date().toISOString(),
@@ -86,14 +86,21 @@ const useChatStore = create((set, get) => ({
         if (!selectedUser) return;
         const socket = useAuthStore.getState().socket;
         if (!socket) return;
+
         socket.on("newMessage", (newMessage) => {
-            const currentMessages = get().messages;
+            const { selectedUser: currentSelectedUser, messages: currentMessages } = get();
+            if (!currentSelectedUser) return;
+
+            // Only show this message if it belongs to the conversation
+            // currently open on screen
+            const isRelevant =
+                newMessage.senderId === currentSelectedUser._id ||
+                newMessage.receiverId === currentSelectedUser._id;
+
+            if (!isRelevant) return;
+
             set({ messages: [...currentMessages, newMessage] });
-
-        })
-
-
-
+        });
     },
     unsubscribeFromMessages: () => {
         const socket = useAuthStore.getState().socket;

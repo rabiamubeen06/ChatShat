@@ -15,10 +15,13 @@ const messageEndRef=useRef(null);
 useEffect(() => {
   if (!selectedUser) return;
   getMessagesByUserId(selectedUser.supabaseId);
-  if (!socket) return;
+}, [selectedUser, getMessagesByUserId]);
+
+useEffect(() => {
+  if (!selectedUser || !socket) return;
   subscribeToMessages();
-  return ()=>unsubscribeFromMessages();
-}, [selectedUser,getMessagesByUserId,subscribeToMessages,unsubscribeFromMessages]);
+  return () => unsubscribeFromMessages();
+}, [selectedUser, socket, subscribeToMessages, unsubscribeFromMessages]);
 useEffect(()=>{
   if(messageEndRef.current){
     messageEndRef.current.scrollIntoView({behavior:"smooth", block: "nearest" });
