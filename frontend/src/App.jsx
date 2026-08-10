@@ -10,7 +10,7 @@ function App(){
   const {checkAuth,isCheckingAuth,authUser}=useAuthStore();
   useEffect(()=>{
     checkAuth();
-    console.log(authUser);
+    
   },[checkAuth]);
   
   if(isCheckingAuth)return <PageLoader/>

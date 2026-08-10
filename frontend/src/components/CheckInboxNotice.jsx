@@ -13,7 +13,7 @@ const CheckInboxNotice = ({ email }) => {
           <div className="w-full h-full flex items-center justify-center bg-white/60 dark:bg-slate-900/60 backdrop-blur-sm p-[clamp(1.25rem,5vh,2rem)]">
             <div className="w-full max-w-md text-center">
           
-              <ChatShatLogo className="w-[clamp(8rem,22vh,16rem)] h-auto mx-auto mb-[clamp(0.75rem,2vh,1rem)]" />
+              <ChatShatLogo className="w-[clamp(15rem,22vh,16rem)] h-auto mx-auto mb-[clamp(0.75rem,2vh,1rem)]" />
 
               <h2 className="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-100 mb-2">
                 Check your inbox
@@ -27,7 +27,7 @@ const CheckInboxNotice = ({ email }) => {
 
               <button
                 onClick={() => navigate('/login')}
-                className="auth-btn w-full sm:w-auto"
+                className="auth-btn w-full sm:w-auto p-4"
               >
                 Continue to login
               </button>
