@@ -4,12 +4,11 @@ A real-time chat application built with the MERN stack, Supabase authentication,
 
 **🔗 Live Demo:** [https://chatshat.up.railway.app/](https://chatshat.up.railway.app/)
 
-> Note: hosted on Railway's free trial tier — the app may be temporarily unavailable if the trial credit has been exhausted.
-
 ## Features
 
 - **Real-time messaging** via Socket.IO — messages appear instantly without refreshing
 - **Supabase-based authentication** (email/password signup with email confirmation, cookie-based sessions)
+- **Guest login** — try the app instantly via Supabase anonymous sign-in, no email or password required; guest data is automatically cleaned up on logout or after 24 hours
 - **Online presence indicators** — see which contacts are currently online
 - **Image sharing** in chat, uploaded to Supabase Storage
 - **Contacts & Chats tabs** — browse everyone you can message, or just your active conversations
@@ -50,7 +49,7 @@ chatapp/
 │       └── server.js        # App entry point
 └── frontend/
     └── src/
-        ├── components/      # UI components (ChatContainer, ChatHeader, etc.)
+        ├── components/      # UI components 
         ├── pages/            # Route-level pages (Login, Signup, ChatPage)
         ├── store/            # Zustand stores (auth, chat, theme)
         └── lib/              # Axios instance config
@@ -75,8 +74,6 @@ SUPABASE_PUBLISHABLE_KEY=your_supabase_publishable_key
 ARCJET_KEY=your_arcjet_site_key
 CLIENT_URL=http://localhost:5173
 ```
-
-The frontend doesn't require its own `.env` — it switches between `http://localhost:3000/api` (dev) and a relative `/api` path (production) automatically based on Vite's build mode.
 
 ## Local Development
 
@@ -106,7 +103,7 @@ npm run build   # installs both backend & frontend deps, builds the frontend
 npm start       # starts the Express server, which serves the built frontend + API
 ```
 
-Deployed on  [Railway](https://railway.app)
+Deployed on [Railway](https://railway.app)
 
 
 ## Real-Time Architecture
@@ -114,5 +111,15 @@ Deployed on  [Railway](https://railway.app)
 - The server maps each authenticated user's ID to their active socket connection(s).
 - When a message is sent, the server emits a `newMessage` event directly to the recipient's socket(s).
 
+## Guest Accounts
+
+To let people try the app instantly without hitting Supabase's free-tier email rate limit, ChatShat supports **guest login** via Supabase's built-in anonymous sign-in.
+
+**Automatic cleanup (two layers):**
+1. **On logout** — a guest's `Message`s and `Profile` are deleted from MongoDB immediately.
+2. **Scheduled sweep** — a background job (`cleanupStaleGuests`, run every 6 hours via `setInterval` in `server.js`) deletes any guest `Profile` (and their `Message`s) older than 24 hours, catching abandoned sessions that never explicitly logged out.
+
+
 ## License
- MIT
+
+MIT
